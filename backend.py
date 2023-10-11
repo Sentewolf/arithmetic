@@ -1,6 +1,6 @@
 import random
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -12,8 +12,11 @@ def complete_task():
     return jsonify({})
 
 
-@app.route("/get-new-task", methods=["GET"])
+@app.route("/get-new-task", methods=["POST"])
 def get_new_task():
+    selected_operations = request.json.get("selectedOperations", [])
+    print(selected_operations)
+
     num1 = random.randint(1, 10)
     num2 = random.randint(1, 10)
     task = f"{num1} + {num2}"

@@ -25,8 +25,43 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function getSelectedOperations() {
+        const selectedOperations = [];
+
+        const additionIcon = document.getElementById('addition');
+        const subtractionIcon = document.getElementById('subtraction');
+        const multiplicationIcon = document.getElementById('multiplication');
+        const divisionIcon = document.getElementById('division');
+
+        if (additionIcon.classList.contains('active')) {
+            selectedOperations.push('addition');
+        }
+
+        if (subtractionIcon.classList.contains('active')) {
+            selectedOperations.push('subtraction');
+        }
+
+        if (multiplicationIcon.classList.contains('active')) {
+            selectedOperations.push('multiplication');
+        }
+
+        if (divisionIcon.classList.contains('active')) {
+            selectedOperations.push('division');
+        }
+
+        return selectedOperations;
+    }
+
     function getNewTask() {
-        fetch('http://localhost:5000/get-new-task')
+        const selectedOperations = getSelectedOperations();
+
+        fetch('http://localhost:5000/get-new-task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ selectedOperations: selectedOperations }),
+        })
             .then(response => response.json())
             .then(data => {
                 let task = data.task;
@@ -107,6 +142,17 @@ document.addEventListener('DOMContentLoaded', function () {
         userInput.textContent = '';
     }
 
+    function toggleOperation(operation) {
+        const operationElement = document.getElementById(operation);
+        const isActive = operationElement.classList.toggle('active');
+
+        if (isActive) {
+            selectedOperation = operation;
+        } else {
+            selectedOperation = null;
+        }
+        console.log('Selected Operation:', selectedOperation);
+    }
 
     function onInputChange() {
         let userAnswer = parseInt(userInput.textContent, 10);
@@ -117,6 +163,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     userInput.addEventListener('input', onInputChange);
+
+    document.getElementById('addition').addEventListener('click', () => toggleOperation('addition'));
+    document.getElementById('subtraction').addEventListener('click', () => toggleOperation('subtraction'));
+    document.getElementById('multiplication').addEventListener('click', () => toggleOperation('multiplication'));
+    document.getElementById('division').addEventListener('click', () => toggleOperation('division'));
 
     // Initial setup
     getNewTask();

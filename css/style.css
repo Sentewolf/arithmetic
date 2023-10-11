@@ -31,7 +31,7 @@
 
 .incorrect-answer-animation::before {
     animation: fade 0.5s ease-in-out infinite;
-    background: radial-gradient(circle, rgba(236, 108, 85, 0.5), rgba(231, 220, 218, 0));
+    background: radial-gradient(circle, rgba(255, 82, 70, 0.596), rgba(231, 220, 218, 0));
 }
 
 
@@ -42,8 +42,10 @@ body {
     height: 100vh;
     margin: 0;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .game-container {
@@ -96,4 +98,25 @@ h1 {
     font-weight: lighter;
     width: auto;
     display: inline;
+}
+
+.operation-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    color: rgb(255, 255, 255);
+}
+
+.operation-icon {
+    width: 64px;
+    height: 64px;
+    background-size: cover;
+    cursor: pointer;
+    margin: 0 20px;
+    fill: none;
+}
+
+.operation-icon.active {
+    fill: rgba(255, 255, 255, 1);
 }
