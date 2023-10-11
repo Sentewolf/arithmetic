@@ -22,10 +22,7 @@ class Task:
         raise NotImplementedError("Subclasses must implement generate_assignment()")
 
     def has_met_targets(self, measured_accuracy, measured_solve_time):
-        return (
-            measured_accuracy >= self.accuracy_target
-            or measured_solve_time <= self.solve_time_target
-        )
+        return measured_accuracy >= self.accuracy_target
 
     def probability_of_selection(self, measured_accuracy, measured_solve_time):
         # Define parameters for normal distribution (mean and standard deviation)

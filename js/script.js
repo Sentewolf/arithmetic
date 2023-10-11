@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let correctAnswer = null;
     let taskType = "";
     let startTime;
+    let goodCounter = 0;
 
     const userInput = document.getElementById('user-answer');
 
@@ -92,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function wrongAnswer() {
+        counter = 0;
         userInput.textContent = correctAnswer;
         // Trigger background animation and send results simultaneously
         Promise.all([
@@ -107,10 +109,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function checkAnswer(userAnswer) {
         if (userAnswer === correctAnswer) {
+            goodCounter += 1;
             // Trigger background animation and send results simultaneously
             Promise.all([
                 animateBackground(),
-                sendResults(result = true)
+                sendResults(result = true),
+                pop()
             ]).then(() => {
                 // Once both animations and fetch are complete, clear input and get new task
                 clearInput();
@@ -229,6 +233,68 @@ document.addEventListener('DOMContentLoaded', function () {
             return JSON.parse(cookieValue);
         }
         return null;
+    }
+
+    // The pop() function is called on every click
+    function pop() {
+        if (goodCounter < 25) {
+            return
+        }
+        goodCounter = 0;
+        var rect = userInput.getBoundingClientRect();
+        let x = rect.left + rect.width / 2;
+        let y = rect.top + rect.height / 2;
+        // Loop to generate 30 particles at once
+        for (let i = 0; i < 30; i++) {
+            // We pass the mouse coordinates to the createParticle() function
+            createParticle(x, y);
+        }
+    }
+
+
+    function createParticle(x, y) {
+        // Create a custom particle element
+        const particle = document.createElement('particle');
+        // Append the element into the body
+        document.body.appendChild(particle);
+
+        // Calculate a random size from 5px to 25px
+        const size = Math.floor(Math.random() * 20 + 5);
+        // Apply the size on each particle
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        // Generate a random color in a blue/purple palette
+        particle.style.background = `hsl(${Math.random() * 90 + 180}, 90%, 60%)`;
+
+        // Generate a random x & y destination within a distance of 75px from the mouse
+        const destinationX = x + (Math.random() - 0.5) * 2 * 475;
+        const destinationY = y + (Math.random() - 0.5) * 2 * 475;
+
+        // Store the animation in a variable because we will need it later
+        const animation = particle.animate([
+            {
+                // Set the origin position of the particle
+                // We offset the particle with half its size to center it around the mouse
+                transform: `translate(${x - (size / 2)}px, ${y - (size / 2)}px)`,
+                opacity: 1
+            },
+            {
+                // We define the final coordinates as the second keyframe
+                transform: `translate(${destinationX}px, ${destinationY}px)`,
+                opacity: 0
+            }
+        ], {
+            // Set a random duration from 500 to 1500ms
+            duration: 1500 + Math.random() * 1000,
+            easing: 'cubic-bezier(0, .9, .57, 1)',
+            // Delay every particle with a random value from 0ms to 200ms
+            delay: Math.random() * 200
+        });
+
+        // When the animation is finished, remove the element from the DOM
+        animation.onfinish = () => {
+            particle.remove();
+        };
     }
 
 

@@ -121,3 +121,12 @@ h1 {
 .operation-icon.active {
     fill: rgba(255, 255, 255, 1);
 }
+
+particle {
+    border-radius: 50%;
+    left: 0;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    opacity: 0;
+}
