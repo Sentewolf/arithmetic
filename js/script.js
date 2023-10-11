@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (event.key >= '0' && event.key <= '9') {
                     userInput.textContent += keyPressed;
                     onInputChange();
+                } else if (event.key === 'Backspace') {
+                    userInput.textContent = userInput.textContent.slice(0, -1);
+                } else if (event.key === 'Delete') {
+                    userInput.textContent = ''; // Set the content to an empty string
+                    onInputChange();
                 }
             }
         }
