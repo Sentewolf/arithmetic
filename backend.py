@@ -11,9 +11,11 @@ CORS(app)
 
 @app.route("/complete-task", methods=["POST"])
 def complete_task():
+    time_limit = 10
+
     progress_data = request.json.get("progressData", {})
     elapsed_time = request.json.get("elapsedTime", {})
-    elapsed_time = min(10, elapsed_time)
+    elapsed_time = min(time_limit, elapsed_time)
 
     result = request.json.get("result", {})
     task_type = request.json.get("type", {})
@@ -30,8 +32,10 @@ def complete_task():
 
     stats = progress_data[task_type]
     stats["count"] += 1
-    stats["average_result"] = 0.95 * stats["average_result"] + 0.05 * result
     stats["average_time"] = 0.95 * stats["average_time"] + 0.05 * elapsed_time
+    if elapsed_time < time_limit:
+        stats["average_result"] = 0.95 * stats["average_result"] + 0.05 * result
+
     progress_data[task_type] = stats
 
     return jsonify({"progressData": progress_data})
@@ -88,12 +92,18 @@ def get_new_task():
 
 if __name__ == "__main__":
     addition_tasks = [
-        Task.SumLessThan10Task(),
-        Task.SumExactly10Task(),
-        Task.AddSingleDigitTo10Task(),
-        Task.AddTwoNumbersBelow10Task(),
-        Task.AddSingleDigitToTwoDigitRoundTask(),
-        Task.AddSingleDigitToTwoDigitTask(),
+        Task.AddNoCarryTask(difficulty_level=10, num_digits=1),
+        Task.SumExactly10Task(difficulty_level=20),
+        Task.AddSingleDigitTo10Task(difficulty_level=30),
+        Task.AddTwoNumbersBelow10Task(difficulty_level=40),
+        Task.AddNoCarryTask(difficulty_level=50, num_digits=1, second_digits=2),
+        Task.AddSingleDigitToTwoDigitRoundTask(difficulty_level=60),
+        Task.AddSingleDigitToTwoDigitTask(difficulty_level=70),
+        Task.AddNoCarryTask(difficulty_level=80, num_digits=2),
+        Task.AddDoubleDigitToHundredsTask(difficulty_level=90),
+        Task.AddNoCarryTask(difficulty_level=100, num_digits=2, second_digits=3),
+        Task.AddTwoDigitToTwoDigitTask(difficulty_level=110),
+        Task.AddThreeDigitToThreeDigitTask(difficulty_level=120),
     ]
 
     addition_tasks = sorted(addition_tasks, key=lambda task: task.difficulty_level)
