@@ -8,6 +8,8 @@ from pyrithmetic import Addition, Subtraction
 app = Flask(__name__)
 CORS(app)
 
+default_progress = {"average_time": 3, "average_result": 0.5, "count": 0}
+
 
 @app.route("/complete-task", methods=["POST"])
 def complete_task():
@@ -24,11 +26,7 @@ def complete_task():
         progress_data = {}
 
     if task_type not in progress_data.keys():
-        progress_data[task_type] = {
-            "average_time": 5,
-            "average_result": 0.5,
-            "count": 0,
-        }
+        progress_data[task_type] = default_progress
 
     stats = progress_data[task_type]
     stats["count"] += 1
@@ -44,7 +42,14 @@ def complete_task():
 @app.route("/get-new-task", methods=["POST"])
 def get_new_task():
     selected_operations = request.json.get("selectedOperations", [])
-    print(selected_operations)
+    picked_operation = random.choice(selected_operations)
+    if picked_operation == "addition":
+        tasks = addition_tasks
+    elif picked_operation == "subtraction":
+        tasks = subtraction_tasks
+    else:
+        tasks = addition_tasks
+
     progress_data = request.json.get("progressData", {})
 
     # Calculate probabilities for each task
@@ -52,11 +57,14 @@ def get_new_task():
     probabilities = []
     activated = []
     previous_activated = True
-    for task in addition_tasks:
+    for task in tasks:
+        if progress_data is None:
+            progress_data = {}
+
         try:
             progress = progress_data[task.id]
         except KeyError:
-            progress = {"average_time": 5, "average_result": 0.5, "count": 0}
+            progress = default_progress
 
         if previous_activated:
             activated.append(True)
@@ -78,11 +86,7 @@ def get_new_task():
     weights = [probability / total_probability for probability in probabilities]
 
     # Perform weighted random selection
-    chosen_task = random.choices(addition_tasks, weights=weights)[0]
-    print(activated)
-    print(probabilities)
-    print(progress_data)
-    print(chosen_task.id)
+    chosen_task = random.choices(tasks, weights=weights)[0]
     task, correct_answer = chosen_task.generate_assignment()
 
     return jsonify(
@@ -128,5 +132,8 @@ if __name__ == "__main__":
     ]
 
     addition_tasks = sorted(addition_tasks, key=lambda task: task.difficulty_level)
+    subtraction_tasks = sorted(
+        subtraction_tasks, key=lambda task: task.difficulty_level
+    )
 
     app.run(debug=True)
