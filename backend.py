@@ -3,7 +3,7 @@ import random
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from pyrithmetic import Task
+from pyrithmetic import Addition, Subtraction
 
 app = Flask(__name__)
 CORS(app)
@@ -92,18 +92,39 @@ def get_new_task():
 
 if __name__ == "__main__":
     addition_tasks = [
-        Task.AddNoCarryTask(difficulty_level=10, num_digits=1),
-        Task.SumExactly10Task(difficulty_level=20),
-        Task.AddSingleDigitTo10Task(difficulty_level=30),
-        Task.AddTwoNumbersBelow10Task(difficulty_level=40),
-        Task.AddNoCarryTask(difficulty_level=50, num_digits=1, second_digits=2),
-        Task.AddSingleDigitToTwoDigitRoundTask(difficulty_level=60),
-        Task.AddSingleDigitToTwoDigitTask(difficulty_level=70),
-        Task.AddNoCarryTask(difficulty_level=80, num_digits=2),
-        Task.AddDoubleDigitToHundredsTask(difficulty_level=90),
-        Task.AddNoCarryTask(difficulty_level=100, num_digits=2, second_digits=3),
-        Task.AddTwoDigitToTwoDigitTask(difficulty_level=110),
-        Task.AddThreeDigitToThreeDigitTask(difficulty_level=120),
+        Addition.AddNoCarryTask(difficulty_level=10, num_digits=1),
+        Addition.SumExactly10Task(difficulty_level=20),
+        Addition.AddSingleDigitTo10Task(difficulty_level=30),
+        Addition.AddTwoNumbersBelow10Task(difficulty_level=40),
+        Addition.AddNoCarryTask(difficulty_level=50, num_digits=1, second_digits=2),
+        Addition.AddSingleDigitToTwoDigitRoundTask(difficulty_level=60),
+        Addition.AddSingleDigitToTwoDigitTask(difficulty_level=70),
+        Addition.AddNoCarryTask(difficulty_level=80, num_digits=2),
+        Addition.AddTwoDigitToTwoDigitTask(difficulty_level=90),
+        Addition.AddDoubleDigitToHundredsTask(difficulty_level=100),
+        Addition.AddNoCarryTask(difficulty_level=110, num_digits=2, second_digits=3),
+        Addition.AddTwoDigitToThreeDigitTask(difficulty_level=120),
+        Addition.AddTwoDigitToThreeDigitTaskWithCarry(difficulty_level=130),
+        Addition.AddThreeDigitToThreeDigitTask(difficulty_level=140),
+    ]
+
+    subtraction_tasks = [
+        Subtraction.SubtractNoCarryTask(difficulty_level=10, num_digits=1),
+        Subtraction.SubtractFrom10(difficulty_level=20),
+        Subtraction.SubtractSingleDigitFromTwoDigitRoundTask(difficulty_level=30),
+        Subtraction.SubtractNoCarryTask(
+            difficulty_level=40, num_digits=1, second_digits=2
+        ),
+        Subtraction.SubtractSingleDigitFromTweenTask(difficulty_level=50),
+        Subtraction.SubtractSingleDigitFromTwoDigitTask(difficulty_level=60),
+        Subtraction.SubtractNoCarryTask(difficulty_level=70, num_digits=2),
+        Subtraction.SubtractTwoDigitFromTwoDigitTask(difficulty_level=80),
+        Subtraction.SubtractNoCarryTask(
+            difficulty_level=90, num_digits=2, second_digits=3
+        ),
+        Subtraction.SubtractTwoDigitFromThreeDigitTask(difficulty_level=100),
+        Subtraction.SubtractTwoDigitFromThreeDigitTaskWithCarry(difficulty_level=110),
+        Subtraction.SubtractThreeDigitFromThreeDigitTask(difficulty_level=120),
     ]
 
     addition_tasks = sorted(addition_tasks, key=lambda task: task.difficulty_level)
