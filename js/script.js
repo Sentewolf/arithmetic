@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     let correctAnswer = null;
+    let taskType = "";
+    let startTime;
 
     const userInput = document.getElementById('user-answer');
 
@@ -54,13 +56,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getNewTask() {
         const selectedOperations = getSelectedOperations();
+        const progressData = getProgressDataFromCookie();
 
         fetch('http://localhost:5000/get-new-task', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ selectedOperations: selectedOperations }),
+            body: JSON.stringify({
+                selectedOperations: selectedOperations,
+                progressData: progressData
+            }),
         })
             .then(response => response.json())
             .then(data => {
@@ -69,10 +75,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('math-problem').textContent = task;
                 // Store correct answer for later validation
                 correctAnswer = data.correct_answer;
+                taskType = data = data.task_type;
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+
+        startTime = new Date(); // Record the start time
     }
 
 
@@ -82,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Trigger background animation and send results simultaneously
         Promise.all([
             animateBackground(good = false),
-            sendResults()
+            sendResults(result = false)
         ]).then(() => {
             // Once both animations and fetch are complete, clear input and get new task
             clearInput();
@@ -96,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Trigger background animation and send results simultaneously
             Promise.all([
                 animateBackground(),
-                sendResults()
+                sendResults(result = true)
             ]).then(() => {
                 // Once both animations and fetch are complete, clear input and get new task
                 clearInput();
@@ -126,16 +135,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function sendResults() {
+    function sendResults(result) {
+        const progressData = getProgressDataFromCookie();
+        const endTime = new Date();
+        const elapsedTime = (endTime - startTime) / 1000;
+
         return fetch('http://localhost:5000/complete-task', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                elaspedTime: 1,
+                elapsedTime: elapsedTime,
+                progressData: progressData,
+                result: result,
+                type: taskType,
             }),
-        });
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Update progress data with data received from the backend
+                setProgressDataInCookie(data.progressData);
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('Error:', error);
+            });
     }
 
     function clearInput() {
@@ -151,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             selectedOperation = null;
         }
-        console.log('Selected Operation:', selectedOperation);
     }
 
     function onInputChange() {
@@ -168,6 +192,40 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('subtraction').addEventListener('click', () => toggleOperation('subtraction'));
     document.getElementById('multiplication').addEventListener('click', () => toggleOperation('multiplication'));
     document.getElementById('division').addEventListener('click', () => toggleOperation('division'));
+
+
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+        const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    }
+
+    // Function to get a cookie value
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.split('=');
+            if (cookieName.trim() === name) {
+                return decodeURIComponent(cookieValue);
+            }
+        }
+        return null;
+    }
+
+    // Set the entire JSON object in a cookie
+    function setProgressDataInCookie(data) {
+        setCookie('progress_data', JSON.stringify(data), 365);
+    }
+
+    // Get the entire JSON object from a cookie
+    function getProgressDataFromCookie() {
+        const cookieValue = getCookie('progress_data');
+        if (cookieValue !== "undefined") {
+            return JSON.parse(cookieValue);
+        }
+        return null;
+    }
+
 
     // Initial setup
     getNewTask();
