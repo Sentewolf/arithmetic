@@ -90,7 +90,11 @@ def get_new_task():
     task, correct_answer = chosen_task.generate_assignment()
 
     return jsonify(
-        {"task": task, "correct_answer": correct_answer, "task_type": chosen_task.id}
+        {
+            "task": task,
+            "correct_answer": correct_answer,
+            "task_type": chosen_task.id,
+        }
     )
 
 

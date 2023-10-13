@@ -3,6 +3,7 @@ let taskType = "";
 let startTime;
 let goodCounter = 0;
 let userInput = null;
+let taskFailed = false;
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function onInputChange() {
-        let userAnswer = parseInt(userInput.textContent, 10);
+        let userAnswer = userInput.textContent;
 
         if (!isNaN(userAnswer)) {
             checkAnswer(userAnswer);
@@ -241,13 +242,14 @@ function getNewTask() {
             // Display the task and store the correct answer
             document.getElementById('math-problem').textContent = task;
             // Store correct answer for later validation
-            correctAnswer = data.correct_answer;
-            taskType = data = data.task_type;
+            correctAnswer = data.correct_answer.toFixed(0);
+            taskType = data.task_type;
         })
         .catch(error => {
             console.error('Error:', error);
         });
 
+    taskFailed = false;
     startTime = new Date(); // Record the start time
 }
 
@@ -266,13 +268,25 @@ function wrongAnswer() {
 
 }
 
+function checkDifferentSubstrings(userAnswer, correctAnswer) {
+    if (userAnswer.length === 0 || correctAnswer.length === 0) {
+        return false;
+    }
+
+    let minLength = Math.min(userAnswer.length, correctAnswer.length);
+    let userSubstring = userAnswer.slice(0, minLength);
+    let correctSubstring = correctAnswer.slice(0, minLength);
+
+    return userSubstring !== correctSubstring;
+}
+
 function checkAnswer(userAnswer) {
     if (userAnswer === correctAnswer) {
         goodCounter += 1;
         // Trigger background animation and send results simultaneously
         Promise.all([
             animateBackground(),
-            sendResults(result = true),
+            sendResults(result = !taskFailed), // if task already failed, then silently send a failure message
             pop()
         ])
             .then(() => {
@@ -280,6 +294,9 @@ function checkAnswer(userAnswer) {
                 clearInput();
                 getNewTask();
             });
+    } else if (checkDifferentSubstrings(userAnswer, correctAnswer)) {
+        console.log("task failed")
+        taskFailed = true;
     }
 }
 
