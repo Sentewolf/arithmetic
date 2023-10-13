@@ -26,7 +26,7 @@ def complete_task():
         progress_data = {}
 
     if task_type not in progress_data.keys():
-        progress_data[task_type] = default_progress
+        progress_data[task_type] = default_progress.copy()
 
     stats = progress_data[task_type]
     stats["count"] += 1
@@ -64,7 +64,7 @@ def get_new_task():
         try:
             progress = progress_data[task.id]
         except KeyError:
-            progress = default_progress
+            progress = default_progress.copy()
 
         if previous_activated:
             activated.append(True)
@@ -73,7 +73,7 @@ def get_new_task():
             )
         else:
             activated.append(False)
-            probabilities.append(0)
+            probabilities.append(0.2 * probabilities[-1])
             continue
 
         probability = task.probability_of_selection(

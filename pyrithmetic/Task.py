@@ -29,9 +29,6 @@ class Task:
         accuracy_scale = 10  # Adjust as needed
         solve_time_scale = 1  # Adjust as needed
 
-        # difficulty_mean = self.difficulty_level
-        # difficulty_std_dev = 1.0  # Adjust as needed
-
         # Calculate probability using normal distribution PDF
         accuracy_probability = 1 - sigmoid(
             measured_accuracy, shift=self.accuracy_target, scale=accuracy_scale
@@ -39,9 +36,6 @@ class Task:
         solve_time_probability = sigmoid(
             measured_solve_time, shift=self.solve_time_target, scale=solve_time_scale
         )
-        # difficulty_probability = normal_pdf(
-        #     self.difficulty_level, mean=difficulty_mean, std_dev=difficulty_std_dev
-        # )
 
         # Combine probabilities
         probability = accuracy_probability * solve_time_probability
