@@ -94,6 +94,13 @@ def get_new_task():
     )
 
 
+@app.route("/scores", methods=["POST"])
+def get_scores():
+    progress_data = request.json.get("progressData", {})
+    print(progress_data)
+    return {"addition": 12, "subtraction": 8, "multiplication": 0, "division": 0}
+
+
 if __name__ == "__main__":
     addition_tasks = [
         Addition.AddNoCarryTask(difficulty_level=10, num_digits=1),

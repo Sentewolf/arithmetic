@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function sendResults(result) {
-        const progressData = getProgressDataFromCookie();
+        let progressData = getProgressDataFromCookie();
         const endTime = new Date();
         const elapsedTime = (endTime - startTime) / 1000;
 
@@ -163,9 +163,11 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
+                progressData = data.progressData
                 // Update progress data with data received from the backend
-                setProgressDataInCookie(data.progressData);
+                setProgressDataInCookie(progressData);
             })
+            .then(updateScores(progressData))
             .catch(error => {
                 // Handle errors here
                 console.error('Error:', error);
@@ -297,7 +299,49 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
+    function updateScores(progressData) {
+        fetch('http://localhost:5000/scores', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                progressData: progressData,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('addition-score').textContent = data.addition;
+                document.getElementById('subtraction-score').textContent = data.subtraction;
+                document.getElementById('multiplication-score').textContent = data.multiplication;
+                document.getElementById('division-score').textContent = data.division;
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
     // Initial setup
+    updateScores(getProgressDataFromCookie());
     getNewTask();
 });
+
+function toggleBox() {
+    var box = document.getElementById("boxContainer");
+    var openButton = document.getElementById("boxButton");
+    if (box.style.display === "block") {
+        box.style.display = "none";
+        openButton.style.display = "block";
+    } else {
+        box.style.display = "block";
+        openButton.style.display = "none"
+    }
+}
+
+function levelUp() {
+    console.log("levelUp")
+    // Add your level up logic here
+}
+
+function resetScores() {
+    console.log("resetScores")
+    // Add your score reset logic here
+}

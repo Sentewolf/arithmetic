@@ -41,6 +41,34 @@
             </svg>
         </div>
     </div>
+
+    <!-- Button to toggle the box -->
+    <div class="toggle-box-button-div" id="boxButton">
+        <span class="open-box-button" onclick="toggleBox()">+</span>
+    </div>
+
+    <!-- Box container -->
+    <div class="box-container" id="boxContainer">
+        <!-- Box content -->
+        <div class="box-content">
+            <span class="close-box-button" onclick="toggleBox()">&times;</span>
+            <div class="operation-score">
+                + <span id="addition-score">Loading...</span>
+            </div>
+            <div class="operation-score">
+                - <span id="subtraction-score">Loading...</span>
+            </div>
+            <div class="operation-score">
+                x <span id="multiplication-score">Loading...</span>
+            </div>
+            <div class="operation-score">
+                / <span id="division-score">Loading...</span>
+            </div>
+            <button class="level-up-button" onclick="levelUp()">Level Up</button>
+            <button class="reset-button" onclick="resetScores()">Reset Scores</button>
+        </div>
+    </div>
+
     <script src="js/script.js"></script>
 </body>
 
