@@ -97,8 +97,90 @@ def get_new_task():
 @app.route("/scores", methods=["POST"])
 def get_scores():
     progress_data = request.json.get("progressData", {})
-    print(progress_data)
-    return {"addition": 12, "subtraction": 8, "multiplication": 0, "division": 0}
+    if progress_data is None or len(progress_data) == 0:
+        return {
+            "addition": 0,
+            "subtraction": 0,
+            "multiplication": 0,
+            "division": 0,
+        }
+
+    scores = {}
+
+    def score_for_tasklist(key, tasks):
+        max_score = len(tasks)
+        task_keys = [task.id for task in tasks]
+        your_score = sum(
+            value["average_result"]
+            for key, value in progress_data.items()
+            if key in task_keys
+        )
+        return int(your_score / max_score * 1000)
+
+    # addition
+    key = "addition"
+    scores[key] = score_for_tasklist(key, addition_tasks)
+
+    # subtraction
+    key = "subtraction"
+    scores[key] = score_for_tasklist(key, subtraction_tasks)
+
+    # multiplication
+    key = "multiplication"
+    scores[key] = 0
+
+    # division
+    key = "division"
+    scores[key] = 0
+
+    return scores
+
+
+@app.route("/level-up", methods=["POST"])
+def level_up():
+    selected_operations = request.json.get("selectedOperations", [])
+    progress_data = request.json.get("progressData", [])
+
+    def level_up_tasklist(tasks, progress_data):
+        previous_activated = True
+        for task in tasks:
+            if progress_data is None:
+                progress_data = {}
+
+            try:
+                stats = progress_data[task.id]
+            except KeyError:
+                stats = default_progress.copy()
+
+            if previous_activated:
+                selected_task = task
+                previous_activated = task.has_met_targets(
+                    stats["average_result"], stats["average_time"]
+                )
+            else:
+                break
+
+        for i in range(100):
+            stats["count"] += 1
+            stats["average_time"] = (
+                0.95 * stats["average_time"]
+                + 0.05 * selected_task.solve_time_target / 2
+            )
+            stats["average_result"] = 0.95 * stats["average_result"] + 0.05 * 1
+
+        progress_data[selected_task.id] = stats
+        return progress_data
+
+    for operation in selected_operations:
+        if operation == "addition":
+            tasks = addition_tasks
+        elif operation == "subtraction":
+            tasks = subtraction_tasks
+        else:
+            continue
+        progress_data = level_up_tasklist(tasks, progress_data)
+
+    return jsonify({"progressData": progress_data})
 
 
 if __name__ == "__main__":
