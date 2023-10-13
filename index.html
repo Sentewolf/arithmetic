@@ -1,111 +1,179 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Arithmetic Training Game</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<body>
+  <body>
     <div class="game-container">
-        <h1 id="math-problem"></h1>
-        <div class="answer-container">
-            <span id="user-answer" contenteditable="true" tabindex="-1"></span>
-        </div>
+      <h1 id="math-problem"></h1>
+      <div class="answer-container">
+        <span id="user-answer" contenteditable="true" tabindex="-1"></span>
+      </div>
     </div>
     <div class="operation-icons">
-        <div class="operation-icon active" id="addition">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64" stroke="currentColor"
-                stroke-width="1">
-                <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
-            </svg>
-        </div>
-        <div class="operation-icon active" id="subtraction">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64" stroke="currentColor"
-                stroke-width="1">
-                <path d="m 2 6 h12 v4 h-12 z" />
-            </svg>
-        </div>
-        <div class="operation-icon" id="multiplication">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64" stroke="currentColor"
-                stroke-width="1" transform="rotate(45)">
-                <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
-            </svg>
-        </div>
-        <div class="operation-icon" id="division">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="64" height="64" stroke="currentColor"
-                stroke-width="1" transform="rotate(45)">
-                <path d="m 2 6 h12 v4 h-12 z" />
-            </svg>
-        </div>
+      <div class="operation-icon active" id="addition">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          width="64"
+          height="64"
+          stroke="currentColor"
+          stroke-width="1"
+        >
+          <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
+        </svg>
+      </div>
+      <div class="operation-icon active" id="subtraction">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          width="64"
+          height="64"
+          stroke="currentColor"
+          stroke-width="1"
+        >
+          <path d="m 2 6 h12 v4 h-12 z" />
+        </svg>
+      </div>
+      <div class="operation-icon" id="multiplication">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          width="64"
+          height="64"
+          stroke="currentColor"
+          stroke-width="1"
+          transform="rotate(45)"
+        >
+          <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
+        </svg>
+      </div>
+      <div class="operation-icon" id="division">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          width="64"
+          height="64"
+          stroke="currentColor"
+          stroke-width="1"
+          transform="rotate(45)"
+        >
+          <path d="m 2 6 h12 v4 h-12 z" />
+        </svg>
+      </div>
     </div>
 
     <!-- Button to toggle the box -->
     <div class="toggle-box-button-div" id="boxButton">
-        <span class="open-box-button" onclick="toggleBox()">+</span>
+      <span class="open-box-button" onclick="toggleBox()">+</span>
     </div>
 
     <!-- Box container -->
     <div class="box-container" id="boxContainer">
-        <!-- Box content -->
-        <div class="box-content">
-            <div class="operation-score-close-container">
-                <span class="close-box-button" onclick="toggleBox()">&times;</span>
-            </div>
-            <div class="operation-score-container">
-                <div class="operation-score">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"
-                        stroke="currentColor" stroke-width="1" style="fill: none">
-                        <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
-                    </svg>
-                    <span id="addition-score">Loading...</span>
-                </div>
-            </div>
-            <div class="operation-score-container">
-                <div class="operation-score">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"
-                        stroke="currentColor" stroke-width="1" style="fill: none">
-                        <path d="m 2 6 h12 v4 h-12 z" />
-                    </svg>
-                    <span id="subtraction-score">Loading...</span>
-                </div>
-            </div>
-            <div class="operation-score-container">
-                <div class="operation-score">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"
-                        stroke="currentColor" stroke-width="1" transform="rotate(45)" style="fill: none">
-                        <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
-                    </svg>
-                    <span id="multiplication-score">Loading...</span>
-                </div>
-            </div>
-            <div class="operation-score-container">
-                <div class="operation-score">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"
-                        stroke="currentColor" stroke-width="1" transform="rotate(45)" style="fill: none">
-                        <path d="m 2 6 h12 v4 h-12 z" />
-                    </svg>
-                    <span id="division-score">Loading...</span>
-                </div>
-            </div>
-            <button class="level-up-button" onclick="levelUp()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" stroke="currentColor"
-                    stroke-width="1" style="fill: currentColor">
-                    <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
-                </svg>
-            </button>
-            <button class="reset-button" onclick="resetScores()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" stroke="currentColor"
-                    stroke-width="1" style="fill: currentColor">
-                    <path d="M 8 2 L 2 8 L 8 14 v-4 h10 v-4 h-10 Z " />
-                </svg>
-            </button>
+      <!-- Box content -->
+      <div class="box-content">
+        <div class="operation-score-close-container">
+          <span class="close-box-button" onclick="toggleBox()">&times;</span>
         </div>
+        <div class="operation-score-container">
+          <div class="operation-score">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              width="32"
+              height="32"
+              stroke="currentColor"
+              stroke-width="1"
+              style="fill: none"
+            >
+              <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
+            </svg>
+            <span id="addition-score">Loading...</span>
+          </div>
+        </div>
+        <div class="operation-score-container">
+          <div class="operation-score">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              width="32"
+              height="32"
+              stroke="currentColor"
+              stroke-width="1"
+              style="fill: none"
+            >
+              <path d="m 2 6 h12 v4 h-12 z" />
+            </svg>
+            <span id="subtraction-score">Loading...</span>
+          </div>
+        </div>
+        <div class="operation-score-container">
+          <div class="operation-score">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              width="32"
+              height="32"
+              stroke="currentColor"
+              stroke-width="1"
+              transform="rotate(45)"
+              style="fill: none"
+            >
+              <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
+            </svg>
+            <span id="multiplication-score">Loading...</span>
+          </div>
+        </div>
+        <div class="operation-score-container">
+          <div class="operation-score">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              width="32"
+              height="32"
+              stroke="currentColor"
+              stroke-width="1"
+              transform="rotate(45)"
+              style="fill: none"
+            >
+              <path d="m 2 6 h12 v4 h-12 z" />
+            </svg>
+            <span id="division-score">Loading...</span>
+          </div>
+        </div>
+        <button class="level-up-button" onclick="levelUp()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="32"
+            height="32"
+            stroke="currentColor"
+            stroke-width="1"
+            style="fill: currentColor"
+          >
+            <path d="m 6 2 h4 v4 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 z" />
+          </svg>
+        </button>
+        <button class="reset-button" onclick="resetScores()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="32"
+            height="32"
+            stroke="currentColor"
+            stroke-width="1"
+            style="fill: currentColor"
+          >
+            <path d="M 8 2 L 2 8 L 8 14 v-4 h10 v-4 h-10 Z " />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <script src="js/script.js"></script>
-</body>
-
+  </body>
 </html>
