@@ -227,3 +227,50 @@ particle {
     top: 10px;
     right: 10px;
 }
+
+
+.confirmation-dialog {
+    background-color: #ffffff2c;
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.confirmation-dialog h2 {
+    margin-bottom: 10px;
+}
+
+.confirmation-dialog button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+}
+
+.confirmation-dialog button:hover {
+    background-color: #45a049;
+}
+
+.confirmation-dialog button.yes-button {
+    background-color: #ff6f61;
+    /* Red color */
+}
+
+.confirmation-dialog button.yes-button:hover {
+    background-color: #eb5e51;
+    /* Red color */
+}

@@ -79,7 +79,8 @@ function toggleBox() {
     }
 }
 
-function levelUp() {
+function confirmedLevelUp() {
+    cancelConfirmationDialog();
     const selectedOperations = getSelectedOperations();
     let progressData = getProgressDataFromCookie();
 
@@ -139,10 +140,38 @@ function getProgressDataFromCookie() {
     return null;
 }
 
+function levelUp() {
+    const confirmationDialog = `
+        <div class="confirmation-dialog">
+            <h2>Are you sure you want to go up a level?</h2>
+            <button class="yes-button" onclick="confirmedLevelUp()">Yes</button>
+            <button onclick="cancelConfirmationDialog()">Cancel</button>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', confirmationDialog);
+}
+
 function resetScores() {
-    console.log("resetScores")
+    const confirmationDialog = `
+        <div class="confirmation-dialog">
+            <h2>Are you sure you want to reset your progress?</h2>
+            <button class="yes-button" onclick="confirmedReset()">Yes</button>
+            <button onclick="cancelConfirmationDialog()">Cancel</button>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', confirmationDialog);
+}
+
+function confirmedReset() {
+    cancelConfirmationDialog();
     setProgressDataInCookie(null);
     updateScores(getProgressDataFromCookie());
+}
+
+function cancelConfirmationDialog() {
+    document.querySelector('.confirmation-dialog').remove();
 }
 
 function updateScores(progressData) {
