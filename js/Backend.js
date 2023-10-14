@@ -1,15 +1,12 @@
 import * as Addition from "./Addition.js";
 import * as Subtraction from "./Subtraction.js";
+import * as utils from "./utils.js";
 
 const defaultProgress = {
   average_time: 3,
   average_result: 0.5,
   count: 0,
 };
-
-function random_int(max) {
-  return Math.floor(Math.random() * max);
-}
 
 function weighted_random(items, weights) {
   var i;
@@ -44,7 +41,7 @@ export function complete_task(progressData, taskType, elapsedTime, result) {
 
 export function get_new_task(selectedOperations, progressData) {
   const pickedOperation =
-    selectedOperations[random_int(selectedOperations.length)];
+    selectedOperations[utils.randint(0, selectedOperations.length)];
 
   let tasks = [];
   if (pickedOperation === "addition") {
@@ -172,20 +169,20 @@ export function level_up(selectedOperations, progressData) {
 }
 
 const additionTasks = [
-  // new Addition.AddNoCarryTask({ difficulty_level: 10, num_digits: 1 }),
+  new Addition.AddNoCarryTask(1),
   new Addition.SumExactly10Task(),
   new Addition.AddSingleDigitTo10Task(),
-  // new Addition.AddTwoNumbersBelow10Task({ difficulty_level: 40 }),
-  // new Addition.AddNoCarryTask({ difficulty_level: 50, num_digits: 1, second_digits: 2 }),
-  // new Addition.AddSingleDigitToTwoDigitRoundTask({ difficulty_level: 60 }),
-  // new Addition.AddSingleDigitToTwoDigitTask({ difficulty_level: 70 }),
-  // new Addition.AddNoCarryTask({ difficulty_level: 80, num_digits: 2 }),
-  // new Addition.AddTwoDigitToTwoDigitTask({ difficulty_level: 90 }),
-  // new Addition.AddDoubleDigitToHundredsTask({ difficulty_level: 100 }),
-  // new Addition.AddNoCarryTask({ difficulty_level: 110, num_digits: 2, second_digits: 3 }),
-  // new Addition.AddTwoDigitToThreeDigitTask({ difficulty_level: 120 }),
-  // new Addition.AddTwoDigitToThreeDigitTaskWithCarry({ difficulty_level: 130 }),
-  // new Addition.AddThreeDigitToThreeDigitTask({ difficulty_level: 140 }),
+  new Addition.AddTwoNumbersBelow10Task(),
+  new Addition.AddNoCarryTask(1, 2),
+  new Addition.AddSingleDigitToTwoDigitRoundTask(),
+  new Addition.AddSingleDigitToTwoDigitTask(),
+  new Addition.AddNoCarryTask(2),
+  new Addition.AddTwoDigitToTwoDigitTask(),
+  new Addition.AddDoubleDigitToHundredsTask(),
+  new Addition.AddNoCarryTask(2, 3),
+  new Addition.AddTwoDigitToThreeDigitTask(),
+  new Addition.AddTwoDigitToThreeDigitTaskWithCarry(),
+  new Addition.AddThreeDigitToThreeDigitTask(),
 ];
 
 const subtractionTasks = [

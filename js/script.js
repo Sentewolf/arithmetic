@@ -1,4 +1,5 @@
 import * as Backend from "./Backend.js";
+import * as utils from "./utils.js";
 
 let correctAnswer = null;
 let taskType = "";
@@ -164,7 +165,6 @@ function getNewTask() {
   const selectedOperations = getSelectedOperations();
   const progressData = getProgressDataFromCookie();
   let data = Backend.get_new_task(selectedOperations, progressData);
-  console.log(data);
   let task = data.task;
   // Display the task and store the correct answer
   document.getElementById("math-problem").textContent = task;
@@ -177,13 +177,9 @@ function getNewTask() {
 }
 
 function wrongAnswer() {
-  counter = 0;
   userInput.textContent = correctAnswer;
   // Trigger background animation and send results simultaneously
-  Promise.all([
-    animateBackground((good = false)),
-    sendResults((result = false)),
-  ]).then(() => {
+  Promise.all([animateBackground(false), sendResults(false)]).then(() => {
     // Once both animations and fetch are complete, clear input and get new task
     clearInput();
     getNewTask();
@@ -216,7 +212,6 @@ function checkAnswer(userAnswer) {
       getNewTask();
     });
   } else if (checkDifferentSubstrings(userAnswer, correctAnswer)) {
-    console.log("task failed");
     taskFailed = true;
   }
 }
@@ -263,7 +258,7 @@ function clearInput() {
 
 // The pop() function is called on every click
 function pop() {
-  if (goodCounter < 25) {
+  if (goodCounter < 20) {
     return;
   }
   goodCounter = 0;
@@ -284,16 +279,16 @@ function createParticle(x, y) {
   document.body.appendChild(particle);
 
   // Calculate a random size from 5px to 25px
-  const size = Math.floor(Math.random() * 20 + 5);
+  const size = utils.randint(5, 25);
   // Apply the size on each particle
   particle.style.width = `${size}px`;
   particle.style.height = `${size}px`;
   // Generate a random color in a blue/purple palette
-  particle.style.background = `hsl(${Math.random() * 90 + 180}, 90%, 60%)`;
+  particle.style.background = `hsl(${utils.randint(0, 255)}, 90%, 60%)`;
 
   // Generate a random x & y destination within a distance of 75px from the mouse
-  const destinationX = x + (Math.random() - 0.5) * 2 * 475;
-  const destinationY = y + (Math.random() - 0.5) * 2 * 475;
+  const destinationX = x + utils.randint(-300, 300);
+  const destinationY = y + utils.randint(-300, 300);
 
   // Store the animation in a variable because we will need it later
   const animation = particle.animate(
@@ -311,8 +306,7 @@ function createParticle(x, y) {
       },
     ],
     {
-      // Set a random duration from 500 to 1500ms
-      duration: 1500 + Math.random() * 1000,
+      duration: utils.randint(1500, 2500),
       easing: "cubic-bezier(0, .9, .57, 1)",
       // Delay every particle with a random value from 0ms to 200ms
       delay: Math.random() * 200,

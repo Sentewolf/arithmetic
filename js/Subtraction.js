@@ -1,8 +1,5 @@
 import * as Task from "./Task.js";
-
-function randint(low, high) {
-  return Math.floor(Math.random() * (high - low)) + low;
-}
+import * as utils from "./utils.js";
 
 class SubtractionTask extends Task.Task {
   constructor(id, { accuracyTarget = 0.8, solveTimeTarget = 3 }) {
@@ -22,7 +19,7 @@ export class SubtractFrom10 extends SubtractionTask {
 
   generateAssignment() {
     const num1 = 10;
-    const num2 = randint(1, 9);
+    const num2 = utils.randint(1, 9);
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -35,8 +32,8 @@ export class SubtractSingleDigitFromTwoDigitRoundTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num2 = randint(1, 9);
-    const num1 = num2 + randint(2, 9) * 10;
+    const num2 = utils.randint(1, 9);
+    const num1 = num2 + utils.randint(2, 9) * 10;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -49,8 +46,8 @@ export class SubtractSingleDigitFromTweenTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num2 = randint(1, 9);
-    const num1 = randint(0, num2 - 1) + 10;
+    const num2 = utils.randint(1, 9);
+    const num1 = utils.randint(0, num2 - 1) + 10;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -63,9 +60,9 @@ export class SubtractSingleDigitFromTwoDigitTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num2 = randint(1, 9);
-    const num1 = randint(0, num2 - 1);
-    num1 += randint(1, 9) * 10;
+    const num2 = utils.randint(1, 9);
+    const num1 = utils.randint(0, num2 - 1);
+    num1 += utils.randint(1, 9) * 10;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -90,11 +87,11 @@ export class SubtractNoCarryTask extends SubtractionTask {
     let num1 = 0;
     let num2 = 0;
     if (include_zeros) {
-      num1 = randint(0, 9);
-      num2 = randint(0, num1);
+      num1 = utils.randint(0, 9);
+      num2 = utils.randint(0, num1);
     } else {
-      num1 = random.randint(1, 9);
-      num2 = random.randint(1, num1);
+      num1 = random.utils.randint(1, 9);
+      num2 = random.utils.randint(1, num1);
     }
     return [num1, num2];
   }
@@ -111,7 +108,7 @@ export class SubtractNoCarryTask extends SubtractionTask {
     }
 
     for (let i = this.firstDigits; i < this.secondDigits; i++) {
-      num1 += Math.floor(Math.random() * 9 + 1) * Math.pow(10, i);
+      num1 += utils.randint(1, 9) * Math.pow(10, i);
     }
 
     let task = `${num1} ${this.operator} ${num2}`;
@@ -127,8 +124,8 @@ export class SubtractTwoDigitFromTwoDigitTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num1 = randint(11, 99);
-    const num2 = randint(11, num1);
+    const num1 = utils.randint(11, 99);
+    const num2 = utils.randint(11, num1);
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -141,9 +138,9 @@ export class SubtractTwoDigitFromThreeDigitTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num1 = randint(11, 99);
-    const num2 = randint(11, num1);
-    num1 += randint(1, 9) * 100;
+    const num1 = utils.randint(11, 99);
+    const num2 = utils.randint(11, num1);
+    num1 += utils.randint(1, 9) * 100;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -156,8 +153,8 @@ export class SubtractTwoDigitFromThreeDigitTaskWithCarry extends SubtractionTask
   }
 
   generateAssignment() {
-    const num1 = randint(101, 99);
-    const num2 = randint(1, 99);
+    const num1 = utils.randint(101, 99);
+    const num2 = utils.randint(1, 99);
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
@@ -170,8 +167,8 @@ export class SubtractThreeDigitFromThreeDigitTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num1 = randint(101, 99);
-    const num2 = randint(101, num1);
+    const num1 = utils.randint(101, 99);
+    const num2 = utils.randint(101, num1);
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
     return { task, correctAnswer };
