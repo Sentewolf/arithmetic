@@ -273,6 +273,7 @@ function pop() {
 }
 
 function createParticle(x, y) {
+  //https://css-tricks.com/playing-with-particles-using-the-web-animations-api/
   // Create a custom particle element
   const particle = document.createElement("particle");
   // Append the element into the body
