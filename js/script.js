@@ -1,3 +1,5 @@
+import * as Backend from "./Backend.js";
+
 let correctAnswer = null;
 let taskType = "";
 let startTime;
@@ -37,13 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function toggleOperation(operation) {
     const operationElement = document.getElementById(operation);
-    const isActive = operationElement.classList.toggle("active");
-
-    if (isActive) {
-      selectedOperation = operation;
-    } else {
-      selectedOperation = null;
-    }
+    operationElement.classList.toggle("active");
   }
 
   function onInputChange() {
@@ -74,44 +70,15 @@ document.addEventListener("DOMContentLoaded", function () {
   getNewTask();
 });
 
-function toggleBox() {
-  var box = document.getElementById("boxContainer");
-  var openButton = document.getElementById("boxButton");
-  if (box.style.display === "block") {
-    box.style.display = "none";
-    openButton.style.display = "block";
-  } else {
-    box.style.display = "block";
-    openButton.style.display = "none";
-  }
-}
-
-function confirmedLevelUp() {
+export function confirmedLevelUp() {
   cancelConfirmationDialog();
   const selectedOperations = getSelectedOperations();
   let progressData = getProgressDataFromCookie();
 
-  fetch("http://localhost:5000/level-up", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      selectedOperations: selectedOperations,
-      progressData: progressData,
-    }),
-  })
-    .then((response) => response.json())
-
-    .then((data) => {
-      progressData = data.progressData;
-      // Update progress data with data received from the backend
-      setProgressDataInCookie(progressData);
-      updateScores(progressData);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  progressData = Backend.level_up(selectedOperations, progressData);
+  // Update progress data with data received from the backend
+  setProgressDataInCookie(progressData);
+  updateScores(progressData);
 }
 
 // Function to set a cookie
@@ -150,60 +117,20 @@ function getProgressDataFromCookie() {
   return null;
 }
 
-function levelUp() {
-  const confirmationDialog = `
-        <div class="confirmation-dialog">
-            <h2>Are you sure you want to go up a level?</h2>
-            <button class="yes-button" onclick="confirmedLevelUp()">Yes</button>
-            <button onclick="cancelConfirmationDialog()">Cancel</button>
-        </div>
-    `;
-
-  document.body.insertAdjacentHTML("beforeend", confirmationDialog);
-}
-
-function resetScores() {
-  const confirmationDialog = `
-        <div class="confirmation-dialog">
-            <h2>Are you sure you want to reset your progress?</h2>
-            <button class="yes-button" onclick="confirmedReset()">Yes</button>
-            <button onclick="cancelConfirmationDialog()">Cancel</button>
-        </div>
-    `;
-
-  document.body.insertAdjacentHTML("beforeend", confirmationDialog);
-}
-
-function confirmedReset() {
+export function confirmedReset() {
   cancelConfirmationDialog();
   setProgressDataInCookie(null);
   updateScores(getProgressDataFromCookie());
 }
 
-function cancelConfirmationDialog() {
-  document.querySelector(".confirmation-dialog").remove();
-}
-
 function updateScores(progressData) {
-  fetch("http://localhost:5000/scores", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      progressData: progressData,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      document.getElementById("addition-score").textContent = data.addition;
-      document.getElementById("subtraction-score").textContent =
-        data.subtraction;
-      document.getElementById("multiplication-score").textContent =
-        data.multiplication;
-      document.getElementById("division-score").textContent = data.division;
-    })
-    .catch((error) => console.error("Error:", error));
+  let data = Backend.get_scores(progressData);
+
+  document.getElementById("addition-score").textContent = data.addition;
+  document.getElementById("subtraction-score").textContent = data.subtraction;
+  document.getElementById("multiplication-score").textContent =
+    data.multiplication;
+  document.getElementById("division-score").textContent = data.division;
 }
 
 function getSelectedOperations() {
@@ -236,29 +163,14 @@ function getSelectedOperations() {
 function getNewTask() {
   const selectedOperations = getSelectedOperations();
   const progressData = getProgressDataFromCookie();
+  let data = Backend.get_new_task(selectedOperations, progressData);
 
-  fetch("http://localhost:5000/get-new-task", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      selectedOperations: selectedOperations,
-      progressData: progressData,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      let task = data.task;
-      // Display the task and store the correct answer
-      document.getElementById("math-problem").textContent = task;
-      // Store correct answer for later validation
-      correctAnswer = data.correct_answer.toFixed(0);
-      taskType = data.task_type;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  let task = data.task;
+  // Display the task and store the correct answer
+  document.getElementById("math-problem").textContent = task;
+  // Store correct answer for later validation
+  correctAnswer = data.correctAnswer.toFixed(0);
+  taskType = data.task_type;
 
   taskFailed = false;
   startTime = new Date(); // Record the start time
@@ -296,7 +208,7 @@ function checkAnswer(userAnswer) {
     // Trigger background animation and send results simultaneously
     Promise.all([
       animateBackground(),
-      sendResults((result = !taskFailed)), // if task already failed, then silently send a failure message
+      sendResults(!taskFailed), // if task already failed, then silently send a failure message
       pop(),
     ]).then(() => {
       // Once both animations and fetch are complete, clear input and get new task
@@ -314,29 +226,15 @@ function sendResults(result) {
   const endTime = new Date();
   const elapsedTime = (endTime - startTime) / 1000;
 
-  return fetch("http://localhost:5000/complete-task", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      elapsedTime: elapsedTime,
-      progressData: progressData,
-      result: result,
-      type: taskType,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      progressData = data.progressData;
-      // Update progress data with data received from the backend
-      setProgressDataInCookie(progressData);
-      updateScores(progressData);
-    })
-    .catch((error) => {
-      // Handle errors here
-      console.error("Error:", error);
-    });
+  progressData = Backend.complete_task(
+    progressData,
+    taskType,
+    elapsedTime,
+    result,
+  );
+  setProgressDataInCookie(progressData);
+  updateScores(progressData);
+  return progressData;
 }
 
 function animateBackground(good = true) {
