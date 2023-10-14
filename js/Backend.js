@@ -1,6 +1,5 @@
-// const random = require("random");
-
 import * as Addition from "./Addition.js";
+import * as Subtraction from "./Subtraction.js";
 
 const defaultProgress = {
   average_time: 3,
@@ -45,13 +44,13 @@ export function complete_task(progressData, taskType, elapsedTime, result) {
 
 export function get_new_task(selectedOperations, progressData) {
   const pickedOperation =
-    selectedOperations[random_int(selectedOperations.length - 1)];
+    selectedOperations[random_int(selectedOperations.length)];
 
   let tasks = [];
   if (pickedOperation === "addition") {
     tasks = additionTasks;
-    //   } else if (pickedOperation === "subtraction") {
-    //     tasks = subtractionTasks;
+  } else if (pickedOperation === "subtraction") {
+    tasks = subtractionTasks;
   } else {
     tasks = additionTasks;
   }
@@ -119,12 +118,11 @@ export function get_scores(progressData) {
   };
 
   const additionScore = scoreForTaskList(additionTasks);
-  //   const subtractionScore = scoreForTaskList(subtractionTasks);
+  const subtractionScore = scoreForTaskList(subtractionTasks);
 
   return {
     addition: additionScore,
-    subtraction: 0,
-    // subtraction: subtractionScore,
+    subtraction: subtractionScore,
     multiplication: 0,
     division: 0,
   };
@@ -166,7 +164,6 @@ export function level_up(selectedOperations, progressData) {
     if (operation === "addition") {
       progressData = levelUpTaskList(additionTasks, progressData);
     } else if (operation === "subtraction") {
-      continue;
       progressData = levelUpTaskList(subtractionTasks, progressData);
     }
   }
@@ -176,8 +173,8 @@ export function level_up(selectedOperations, progressData) {
 
 const additionTasks = [
   // new Addition.AddNoCarryTask({ difficulty_level: 10, num_digits: 1 }),
-  new Addition.SumExactly10Task({ difficulty_level: 20 }),
-  new Addition.AddSingleDigitTo10Task({ difficulty_level: 30 }),
+  new Addition.SumExactly10Task(),
+  new Addition.AddSingleDigitTo10Task(),
   // new Addition.AddTwoNumbersBelow10Task({ difficulty_level: 40 }),
   // new Addition.AddNoCarryTask({ difficulty_level: 50, num_digits: 1, second_digits: 2 }),
   // new Addition.AddSingleDigitToTwoDigitRoundTask({ difficulty_level: 60 }),
@@ -191,22 +188,19 @@ const additionTasks = [
   // new Addition.AddThreeDigitToThreeDigitTask({ difficulty_level: 140 }),
 ];
 
-// const subtractionTasks = [
-//     new Subtraction.SubtractNoCarryTask({ difficulty_level: 10, num_digits: 1 }),
-//     new Subtraction.SubtractFrom10({ difficulty_level: 20 }),
-//     new Subtraction.SubtractSingleDigitFromTwoDigitRoundTask({ difficulty_level: 30 }),
-//     new Subtraction.SubtractNoCarryTask({ difficulty_level: 40, num_digits: 1, second_digits: 2 }),
-//     new Subtraction.SubtractSingleDigitFromTweenTask({ difficulty_level: 50 }),
-//     new Subtraction.SubtractSingleDigitFromTwoDigitTask({ difficulty_level: 60 }),
-//     new Subtraction.SubtractNoCarryTask({ difficulty_level: 70, num_digits: 2 }),
-//     new Subtraction.SubtractTwoDigitFromTwoDigitTask({ difficulty_level: 80 }),
-//     new Subtraction.SubtractNoCarryTask({ difficulty_level: 90, num_digits: 2, second_digits: 3 }),
-//     new Subtraction.SubtractTwoDigitFromThreeDigitTask({ difficulty_level: 100 }),
-//     new Subtraction.SubtractTwoDigitFromThreeDigitTaskWithCarry({ difficulty_level: 110 }),
-//     new Subtraction.SubtractThreeDigitFromThreeDigitTask({ difficulty_level: 120 }),
-// ];
+const subtractionTasks = [
+  new Subtraction.SubtractNoCarryTask(1),
+  new Subtraction.SubtractFrom10(),
+  new Subtraction.SubtractSingleDigitFromTwoDigitRoundTask(),
+  new Subtraction.SubtractNoCarryTask(1, 2),
+  new Subtraction.SubtractSingleDigitFromTweenTask(),
+  new Subtraction.SubtractSingleDigitFromTwoDigitTask(),
+  new Subtraction.SubtractNoCarryTask(2),
+  new Subtraction.SubtractTwoDigitFromTwoDigitTask(),
+  new Subtraction.SubtractNoCarryTask(2, 3),
+  new Subtraction.SubtractTwoDigitFromThreeDigitTask(),
+  new Subtraction.SubtractTwoDigitFromThreeDigitTaskWithCarry(),
+  new Subtraction.SubtractThreeDigitFromThreeDigitTask(),
+];
 
-additionTasks.sort(
-  (task1, task2) => task1.difficulty_level - task2.difficulty_level,
-);
 // subtractionTasks.sort((task1, task2) => task1.difficulty_level - task2.difficulty_level);

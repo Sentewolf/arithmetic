@@ -1,11 +1,8 @@
 import * as Task from "./Task.js";
 
 class AdditionTask extends Task.Task {
-  constructor(
-    id,
-    { difficultyLevel, accuracyTarget = 0.8, solveTimeTarget = 3 },
-  ) {
-    super(id, { difficultyLevel, accuracyTarget, solveTimeTarget });
+  constructor(id, { accuracyTarget = 0.8, solveTimeTarget = 3 }) {
+    super(id, { accuracyTarget, solveTimeTarget });
     this.operator = "+";
   }
 
@@ -15,8 +12,8 @@ class AdditionTask extends Task.Task {
 }
 
 export class SumExactly10Task extends AdditionTask {
-  constructor(difficultyLevel = 20) {
-    super("5+5", { difficultyLevel });
+  constructor() {
+    super("5+5", {});
   }
 
   generateAssignment() {
@@ -29,8 +26,8 @@ export class SumExactly10Task extends AdditionTask {
 }
 
 export class AddSingleDigitTo10Task extends AdditionTask {
-  constructor(difficultyLevel = 30) {
-    super("10+5", { difficultyLevel });
+  constructor() {
+    super("10+5", {});
   }
 
   generateAssignment() {

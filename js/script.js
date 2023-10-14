@@ -164,7 +164,7 @@ function getNewTask() {
   const selectedOperations = getSelectedOperations();
   const progressData = getProgressDataFromCookie();
   let data = Backend.get_new_task(selectedOperations, progressData);
-
+  console.log(data);
   let task = data.task;
   // Display the task and store the correct answer
   document.getElementById("math-problem").textContent = task;

@@ -10,10 +10,9 @@ function sigmoid(x, shift, scale) {
 }
 
 export class Task {
-  constructor(id, { accuracyTarget, solveTimeTarget, difficultyLevel }) {
+  constructor(id, { accuracyTarget, solveTimeTarget }) {
     this.accuracyTarget = accuracyTarget;
     this.solveTimeTarget = solveTimeTarget;
-    this.difficultyLevel = difficultyLevel;
     this.id = id;
   }
 
