@@ -198,8 +198,8 @@ export class AddNoCarryTask extends AdditionTask {
       num1 = utils.randint(0, 9);
       num2 = utils.randint(0, 10 - num1 - 1);
     } else {
-      num1 = random.utils.randint(1, 8);
-      num2 = random.utils.randint(1, 10 - num1 - 1);
+      num1 = utils.randint(1, 8);
+      num2 = utils.randint(1, 10 - num1 - 1);
     }
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
@@ -213,7 +213,7 @@ export class AddNoCarryTask extends AdditionTask {
 
     for (let i = 0; i < this.first_digits; i++) {
       let includeZeros = !(i === 0 || i === this.first_digits - 1);
-      let [a, b] = this.generateNumberPair({ includeZeros });
+      let [a, b] = this.generateNumberPair(includeZeros);
       num1 += a * Math.pow(10, i);
       num2 += b * Math.pow(10, i);
     }

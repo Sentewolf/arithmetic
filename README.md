@@ -9,3 +9,5 @@
 - 5 + x = 8
 - 8 - x = 3
 - fix screen height on mobile devices
+- add multiples of ten
+- don't add or subtract zeros

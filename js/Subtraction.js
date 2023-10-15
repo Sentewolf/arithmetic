@@ -61,7 +61,7 @@ export class SubtractSingleDigitFromTwoDigitTask extends SubtractionTask {
 
   generateAssignment() {
     const num2 = utils.randint(1, 9);
-    const num1 = utils.randint(0, num2 - 1);
+    const num1 = utils.randint(1, num2 - 1);
     num1 += utils.randint(1, 9) * 10;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
@@ -90,8 +90,8 @@ export class SubtractNoCarryTask extends SubtractionTask {
       num1 = utils.randint(0, 9);
       num2 = utils.randint(0, num1);
     } else {
-      num1 = random.utils.randint(1, 9);
-      num2 = random.utils.randint(1, num1);
+      num1 = utils.randint(1, 9);
+      num2 = utils.randint(1, num1);
     }
     return [num1, num2];
   }
@@ -102,7 +102,7 @@ export class SubtractNoCarryTask extends SubtractionTask {
 
     for (let i = 0; i < this.first_digits; i++) {
       let includeZeros = !(i === 0 || i === this.first_digits - 1);
-      let [a, b] = this.generateNumberPair({ includeZeros });
+      let [a, b] = this.generateNumberPair(includeZeros);
       num1 += a * Math.pow(10, i);
       num2 += b * Math.pow(10, i);
     }
