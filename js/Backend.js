@@ -90,7 +90,7 @@ export function get_new_task(selectedOperations, progressData) {
   //   const weights = probabilities.map(
   //     (probability) => probability / totalProbability
   //   );
-
+  console.log(probabilities);
   const chosenTask = weighted_random(tasks, probabilities);
   let result = chosenTask.generateAssignment();
   result["task_type"] = chosenTask.id;
@@ -187,6 +187,7 @@ const additionTasks = [
   new Addition.AddTwoNumbersBelow10Task(),
   new Addition.AddNoCarryTask(1, 2),
   new Addition.AddSingleDigitToTwoDigitRoundTask(),
+  new Addition.AddTens(),
   new Addition.AddSingleDigitToTwoDigitTask(),
   new Addition.AddNoCarryTask(2),
   new Addition.AddTwoDigitToTwoDigitTask(),

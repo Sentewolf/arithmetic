@@ -20,8 +20,8 @@ export class MultiplicationTableN extends MultiplicationTask {
   }
 
   generateAssignment() {
-    const num1 = this.table;
-    const num2 = utils.randint(1, 10);
+    let num1 = this.table;
+    let num2 = utils.randint(1, 10);
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 * num2;
     return { task, correctAnswer };
@@ -43,11 +43,11 @@ export class MultiplyNbyM extends MultiplicationTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(
+    let num1 = utils.randint(
       Math.pow(10, this.first_digits - 1),
       Math.pow(10, this.first_digits - 1) - 1,
     );
-    const num2 = utils.randint(
+    let num2 = utils.randint(
       Math.pow(10, this.second_digits - 1),
       Math.pow(10, this.second_digits - 1) - 1,
     );

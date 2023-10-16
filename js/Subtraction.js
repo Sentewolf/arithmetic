@@ -60,8 +60,8 @@ export class SubtractSingleDigitFromTwoDigitTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num2 = utils.randint(1, 9);
-    const num1 = utils.randint(1, num2 - 1);
+    let num2 = utils.randint(1, 9);
+    let num1 = utils.randint(1, num2 - 1);
     num1 += utils.randint(1, 9) * 10;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;
@@ -138,8 +138,8 @@ export class SubtractTwoDigitFromThreeDigitTask extends SubtractionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(11, 99);
-    const num2 = utils.randint(11, num1);
+    let num1 = utils.randint(11, 99);
+    let num2 = utils.randint(11, num1);
     num1 += utils.randint(1, 9) * 100;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 - num2;

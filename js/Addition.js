@@ -18,8 +18,8 @@ export class SumExactly10Task extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(1, 9);
-    const num2 = 10 - num1;
+    let num1 = utils.randint(1, 9);
+    let num2 = 10 - num1;
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 + num2;
     return { task, correctAnswer };
@@ -49,8 +49,8 @@ export class AddTwoNumbersBelow10Task extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(1, 9);
-    const num2 = utils.randint(1, 9);
+    let num1 = utils.randint(1, 9);
+    let num2 = utils.randint(1, 9);
     const task = `${num1} ${this.operator} ${num2}`;
     const correctAnswer = num1 + num2;
     return { task, correctAnswer };
@@ -63,8 +63,25 @@ export class AddSingleDigitToTwoDigitRoundTask extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(1, 9);
-    const num2 = utils.randint(2, 9) * 10;
+    let num1 = utils.randint(1, 9);
+    let num2 = utils.randint(2, 9) * 10;
+    if (Math.random() < 0.5) {
+      [num1, num2] = [num2, num1]; // Randomize the order
+    }
+    const task = `${num1} ${this.operator} ${num2}`;
+    const correctAnswer = num1 + num2;
+    return { task, correctAnswer };
+  }
+}
+
+export class AddTens extends AdditionTask {
+  constructor() {
+    super("20+30", {});
+  }
+
+  generateAssignment() {
+    let num1 = utils.randint(1, 9) * 10;
+    let num2 = utils.randint(1, 9) * 10;
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
     }
@@ -80,8 +97,8 @@ export class AddSingleDigitToTwoDigitTask extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(1, 9);
-    const num2 = utils.randint(10, 99 - num1);
+    let num1 = utils.randint(1, 9);
+    let num2 = utils.randint(10, 99 - num1);
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
     }
@@ -97,8 +114,8 @@ export class AddDoubleDigitToHundredsTask extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(10, 99);
-    const num2 = utils.randint(1, 9) * 100;
+    let num1 = utils.randint(10, 99);
+    let num2 = utils.randint(1, 9) * 100;
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
     }
@@ -114,8 +131,8 @@ export class AddTwoDigitToTwoDigitTask extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(11, 88);
-    const num2 = utils.randint(11, 99 - num1);
+    let num1 = utils.randint(11, 88);
+    let num2 = utils.randint(11, 99 - num1);
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
     }
@@ -131,8 +148,8 @@ export class AddTwoDigitToThreeDigitTask extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(10, 98);
-    const num2 = utils.randint(1, 99 - num1);
+    let num1 = utils.randint(10, 98);
+    let num2 = utils.randint(1, 99 - num1);
     num2 += utils.randint(1, 9) * 100;
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
@@ -149,8 +166,8 @@ export class AddTwoDigitToThreeDigitTaskWithCarry extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(10, 99);
-    const num2 = utils.randint(101, 999 - num1);
+    let num1 = utils.randint(10, 99);
+    let num2 = utils.randint(101, 999 - num1);
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
     }
@@ -166,8 +183,8 @@ export class AddThreeDigitToThreeDigitTask extends AdditionTask {
   }
 
   generateAssignment() {
-    const num1 = utils.randint(101, 898);
-    const num2 = utils.randint(101, 999 - num1);
+    let num1 = utils.randint(101, 898);
+    let num2 = utils.randint(101, 999 - num1);
     if (Math.random() < 0.5) {
       [num1, num2] = [num2, num1]; // Randomize the order
     }
