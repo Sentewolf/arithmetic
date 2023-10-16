@@ -41,6 +41,33 @@ document.addEventListener("DOMContentLoaded", function () {
   function toggleOperation(operation) {
     const operationElement = document.getElementById(operation);
     operationElement.classList.toggle("active");
+
+    let progressData = getProgressDataFromCookie();
+    progressData[operation] = operationElement.classList.contains("active");
+    setProgressDataInCookie(progressData);
+  }
+
+  function initializeOperations() {
+    let progressData = getProgressDataFromCookie();
+
+    const operations = [
+      "addition",
+      "subtraction",
+      "multiplication",
+      "division",
+    ];
+
+    operations.forEach((operation) => {
+      const operationElement = document.getElementById(operation);
+
+      if (progressData.hasOwnProperty(operation)) {
+        if (progressData[operation]) {
+          operationElement.classList.add("active");
+        } else {
+          operationElement.classList.remove("active");
+        }
+      }
+    });
   }
 
   function onInputChange() {
@@ -67,6 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", () => toggleOperation("division"));
 
   // Initial setup
+  initializeOperations();
   updateScores(getProgressDataFromCookie());
   getNewTask();
 });
