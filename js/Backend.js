@@ -86,11 +86,6 @@ export function get_new_task(selectedOperations, progressData) {
     probabilities.push(probability);
   }
 
-  //   const totalProbability = probabilities.reduce((acc, val) => acc + val, 0);
-  //   const weights = probabilities.map(
-  //     (probability) => probability / totalProbability
-  //   );
-  console.log(probabilities);
   const chosenTask = weighted_random(tasks, probabilities);
   let result = chosenTask.generateAssignment();
   result["task_type"] = chosenTask.id;
