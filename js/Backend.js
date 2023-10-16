@@ -1,5 +1,7 @@
 import * as Addition from "./Addition.js";
 import * as Subtraction from "./Subtraction.js";
+import * as Multiplication from "./Multiplication.js";
+import * as Division from "./Division.js";
 import * as utils from "./utils.js";
 
 const defaultProgress = {
@@ -48,6 +50,10 @@ export function get_new_task(selectedOperations, progressData) {
     tasks = additionTasks;
   } else if (pickedOperation === "subtraction") {
     tasks = subtractionTasks;
+  } else if (pickedOperation === "multiplication") {
+    tasks = multiplicationTasks;
+  } else if (pickedOperation === "division") {
+    tasks = divisionTasks;
   } else {
     tasks = additionTasks;
   }
@@ -116,12 +122,14 @@ export function get_scores(progressData) {
 
   const additionScore = scoreForTaskList(additionTasks);
   const subtractionScore = scoreForTaskList(subtractionTasks);
+  const multiplicationScore = scoreForTaskList(multiplicationTasks);
+  const divisionScore = scoreForTaskList(divisionTasks);
 
   return {
     addition: additionScore,
     subtraction: subtractionScore,
-    multiplication: 0,
-    division: 0,
+    multiplication: multiplicationScore,
+    division: divisionScore,
   };
 }
 
@@ -162,6 +170,10 @@ export function level_up(selectedOperations, progressData) {
       progressData = levelUpTaskList(additionTasks, progressData);
     } else if (operation === "subtraction") {
       progressData = levelUpTaskList(subtractionTasks, progressData);
+    } else if (operation === "multiplication") {
+      progressData = levelUpTaskList(multiplicationTasks, progressData);
+    } else if (operation === "division") {
+      progressData = levelUpTaskList(divisionTasks, progressData);
     }
   }
 
@@ -200,4 +212,40 @@ const subtractionTasks = [
   new Subtraction.SubtractThreeDigitFromThreeDigitTask(),
 ];
 
-// subtractionTasks.sort((task1, task2) => task1.difficulty_level - task2.difficulty_level);
+const multiplicationTasks = [
+  new Multiplication.MultiplicationTableN(2),
+  new Multiplication.MultiplicationTableN(3),
+  new Multiplication.MultiplicationTableN(4),
+  new Multiplication.MultiplicationTableN(5),
+  new Multiplication.MultiplicationTableN(6),
+  new Multiplication.MultiplicationTableN(7),
+  new Multiplication.MultiplicationTableN(8),
+  new Multiplication.MultiplicationTableN(9),
+  new Multiplication.MultiplicationTableN(10),
+  new Multiplication.MultiplicationTableN(11),
+  new Multiplication.MultiplicationTableN(12),
+  new Multiplication.MultiplyNbyM(1, 2),
+  new Multiplication.MultiplyNbyM(1, 3),
+  new Multiplication.MultiplyNbyM(2, 2),
+  new Multiplication.MultiplyNbyM(2, 3),
+  new Multiplication.MultiplyNbyM(3, 3),
+];
+
+const divisionTasks = [
+  new Division.DivisionTableN(2),
+  new Division.DivisionTableN(3),
+  new Division.DivisionTableN(4),
+  new Division.DivisionTableN(5),
+  new Division.DivisionTableN(6),
+  new Division.DivisionTableN(7),
+  new Division.DivisionTableN(8),
+  new Division.DivisionTableN(9),
+  new Division.DivisionTableN(10),
+  new Division.DivisionTableN(11),
+  new Division.DivisionTableN(12),
+  new Division.DivideNbyM(1, 2),
+  new Division.DivideNbyM(1, 3),
+  new Division.DivideNbyM(2, 2),
+  new Division.DivideNbyM(2, 3),
+  new Division.DivideNbyM(3, 3),
+];
